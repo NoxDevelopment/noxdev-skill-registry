@@ -6,19 +6,19 @@ Single source of truth for every Claude Code skill pack used across the studio's
 
 Each row is a git repo whose primary purpose is producing one or more Claude Code skills. The `Skills Provided` column lists what each repo's `publish.sh` (or equivalent) installs into a target's `.claude/skills/`.
 
-| Repo | Path | Skills Provided | Git Remote | Initial Commit |
-|------|------|----------------|------------|----------------|
-| **gamegen** | `C:/code/ai/gamegen` | `gamegen` (engine-agnostic personas / commands / templates / rules) | _local-only_ | `7fb32a2` |
-| **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task` | github.com/htdt/godogen | `c2d5815` |
-| **godot-ui** | `C:/code/ai/godot-ui` | `godot-ui` (Godot UI specialist — Control nodes, StyleBox, Theme, common shapes) | _local-only_ | `3b612d5` |
-| **unitygen** | `C:/code/ai/unitygen` | `unitygen`, `unity-task` | _local-only_ | `03d5145` |
-| **unrealgen** | `C:/code/ai/unrealgen` | `unrealgen`, `unreal-task` | _local-only_ | `f148834` |
-| **ui-ux-pro-max** | `C:/code/ai/ui-ux-pro-max` | `ui-ux-pro-max` (UI/UX design intelligence — 67 styles, 96 palettes, 13 stacks) | _local-only_ | `071779e` |
-| **noxdev-skill-registry** | `C:/code/ai/noxdev-skill-registry` | _(this registry)_ | _local-only_ | `be95152` |
+| Repo | Path | Skills Provided | Git Remote |
+|------|------|----------------|------------|
+| **gamegen** | `C:/code/ai/gamegen` | `gamegen` (engine-agnostic personas / commands / templates / rules) | github.com/NoxDevelopment/gamegen |
+| **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task` | github.com/NoxDevelopment/godogen (origin) · htdt/godogen (upstream) |
+| **godot-ui** | `C:/code/ai/godot-ui` | `godot-ui` (Godot UI specialist — Control nodes, StyleBox, Theme, common shapes) | github.com/NoxDevelopment/godot-ui |
+| **unitygen** | `C:/code/ai/unitygen` | `unitygen`, `unity-task` | github.com/NoxDevelopment/unitygen |
+| **unrealgen** | `C:/code/ai/unrealgen` | `unrealgen`, `unreal-task` | github.com/NoxDevelopment/unrealgen |
+| **ui-ux-pro-max** | `C:/code/ai/ui-ux-pro-max` | `ui-ux-pro-max` (UI/UX design intelligence — 67 styles, 96 palettes, 13 stacks) | github.com/NoxDevelopment/ui-ux-pro-max |
+| **noxdev-skill-registry** | `C:/code/ai/noxdev-skill-registry` | _(this registry)_ | github.com/NoxDevelopment/noxdev-skill-registry |
 
-### Authoring repos — what's missing
+### Authoring repos — notes
 
-- **gamegen / unitygen / unrealgen / godot-ui / ui-ux-pro-max / noxdev-skill-registry** are local-only. Push to a NoxDevelopment GitHub org when ready (matches `godotsmith` / `noxdev-studio` / `OMNI-ORCHESTRA` / `companion-ai` pattern).
+- All authoring repos are now hosted under `github.com/NoxDevelopment/`. (godogen tracks `htdt/godogen` as `upstream` for pulling community improvements.)
 - **godogen** ships with two skills (`godogen`, `godot-task`); the engine sibling repos (`unitygen`, `unrealgen`) follow the same orchestrator+executor split.
 - **godot-ui** is a sibling pack to `godogen` — it covers Godot UI mechanics. Project-specific style identity stays in the consumer (see `godot-ui/skills/godot-ui/style-overrides.md`).
 
@@ -74,9 +74,9 @@ Each engine pack ships an orchestrator (`<engine>gen`) + executor (`<engine>-tas
 
 ## Action items
 
-- [ ] **Create GitHub remotes** for `gamegen`, `unitygen`, `unrealgen`, `godot-ui`, `ui-ux-pro-max`, `noxdev-skill-registry` under `github.com/NoxDevelopment/` and push initial commits.
-- [x] **Extract ui-ux-pro-max** to its own repo with `publish.sh`. _(done 2026-04-25 — `C:/code/ai/ui-ux-pro-max`, both consumers republished from the new source.)_
-- [x] **Promote godot-ui** to a reusable sibling pack. _(done 2026-04-25 — `C:/code/ai/godot-ui`, cigs-and-dreams republished + project-local override moved to `godot-ui-overrides/style.md`.)_
+- [x] **Create GitHub remotes** for `gamegen`, `unitygen`, `unrealgen`, `godot-ui`, `ui-ux-pro-max`, `noxdev-skill-registry`, `godogen` (NoxDev fork) under `github.com/NoxDevelopment/` and push. _(done 2026-04-26.)_
+- [x] **Extract ui-ux-pro-max** to its own repo with `publish.sh`. _(done 2026-04-25 — both consumers republished from the new source.)_
+- [x] **Promote godot-ui** to a reusable sibling pack. _(done 2026-04-25 — cigs-and-dreams republished + project-local override moved to `godot-ui-overrides/style.md`.)_
 - [ ] **Audit consumers periodically.** Run `scripts/discover.sh` and `scripts/audit.sh` quarterly (or after a `publish.sh` change to any source pack) to make sure consumers haven't drifted.
 
 ## Discovery commands
