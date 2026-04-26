@@ -1,6 +1,6 @@
 # Skills Registry — what we author, what we consume, where it lives
 
-Single source of truth for every Claude Code skill pack used across the studio's apps. Maintained alongside `C:/code/ai/CLAUDE.md`. Last reviewed: **2026-04-25**.
+Single source of truth for every Claude Code skill pack used across the studio's apps. Maintained alongside `C:/code/ai/CLAUDE.md`. Last reviewed: **2026-04-25** (added `ui-ux-pro-max` and `godot-ui` as authoring repos after extraction).
 
 ## Authoring repos (sources)
 
@@ -10,35 +10,36 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 |------|------|----------------|------------|----------------|
 | **gamegen** | `C:/code/ai/gamegen` | `gamegen` (engine-agnostic personas / commands / templates / rules) | _local-only_ | `7fb32a2` |
 | **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task` | github.com/htdt/godogen | `c2d5815` |
+| **godot-ui** | `C:/code/ai/godot-ui` | `godot-ui` (Godot UI specialist — Control nodes, StyleBox, Theme, common shapes) | _local-only_ | `3b612d5` |
 | **unitygen** | `C:/code/ai/unitygen` | `unitygen`, `unity-task` | _local-only_ | `03d5145` |
 | **unrealgen** | `C:/code/ai/unrealgen` | `unrealgen`, `unreal-task` | _local-only_ | `f148834` |
+| **ui-ux-pro-max** | `C:/code/ai/ui-ux-pro-max` | `ui-ux-pro-max` (UI/UX design intelligence — 67 styles, 96 palettes, 13 stacks) | _local-only_ | `071779e` |
+| **noxdev-skill-registry** | `C:/code/ai/noxdev-skill-registry` | _(this registry)_ | _local-only_ | `be95152` |
 
 ### Authoring repos — what's missing
 
-- **gamegen / unitygen / unrealgen** are local-only. Push to a NoxDevelopment GitHub org when ready (matches `godotsmith` / `noxdev-studio` / `OMNI-ORCHESTRA` / `companion-ai` pattern).
-- **godogen** ships with two skills (`godogen`, `godot-task`); the new sibling repos follow the same orchestrator+executor split.
+- **gamegen / unitygen / unrealgen / godot-ui / ui-ux-pro-max / noxdev-skill-registry** are local-only. Push to a NoxDevelopment GitHub org when ready (matches `godotsmith` / `noxdev-studio` / `OMNI-ORCHESTRA` / `companion-ai` pattern).
+- **godogen** ships with two skills (`godogen`, `godot-task`); the engine sibling repos (`unitygen`, `unrealgen`) follow the same orchestrator+executor split.
+- **godot-ui** is a sibling pack to `godogen` — it covers Godot UI mechanics. Project-specific style identity stays in the consumer (see `godot-ui/skills/godot-ui/style-overrides.md`).
 
 ## Consumed-but-no-source skills
 
-Skills that exist in consumer projects but have no authoritative authoring repo we own. Each is a candidate for extraction into its own pack.
+_All previously-orphaned skills now have authoring repos. This section tracks any new orphans as they appear._
 
-| Skill | Found in (consumers) | Notes |
-|-------|----------------------|-------|
-| `ui-ux-pro-max` | `BMAD claude Windows`, `localllm_poc` | 33 files, identical copies. Third-party? Should live in one source repo with `publish.sh`. |
-| `godot-ui` | `game dev/cigs-and-dreams` | Single file (`godot-ui-expert.md`). Project-local custom skill — author of cigs-and-dreams's Shadowrun-SNES UI guide. Decide: keep project-local or promote to a `godogen-ui` sibling. |
+(none currently)
 
 ## Consumer projects (where skills are published)
 
 These are the runtime homes. Each `.claude/skills/<name>` directory under a consumer is the result of a `publish.sh` invocation from one of the authoring repos above.
 
-| Project | Path | Installed Skills |
-|---------|------|------------------|
-| Cigs and Dreams | `C:/code/ai/game dev/cigs-and-dreams/.claude/skills/` | `godot-task`, `godot-ui`, `godotsmith` |
-| Deathwood | `C:/code/ai/game dev/deathwood/.claude/skills/` | `godot-task`, `godotsmith` |
-| New Excitebike | `C:/code/ai/game dev/new-excitebike/.claude/skills/` | `godot-task`, `godotsmith` |
-| Primordial | `C:/code/ai/game dev/primordial/.claude/skills/` | `godot-task`, `godotsmith` |
-| BMAD claude Windows | `C:/code/ai/BMAD claude Windows/.claude/skills/` | `ui-ux-pro-max` |
-| localllm_poc / Companion AI | `C:/code/ai/localllm_poc/.claude/skills/` | `ui-ux-pro-max` |
+| Project | Path | Installed Skills | Project-local overrides |
+|---------|------|------------------|-------------------------|
+| Cigs and Dreams | `C:/code/ai/game dev/cigs-and-dreams/.claude/skills/` | `godot-task`, `godot-ui`, `godotsmith` | `godot-ui-overrides/style.md` (Shadowrun-SNES palette + project rules) |
+| Deathwood | `C:/code/ai/game dev/deathwood/.claude/skills/` | `godot-task`, `godotsmith` | — |
+| New Excitebike | `C:/code/ai/game dev/new-excitebike/.claude/skills/` | `godot-task`, `godotsmith` | — |
+| Primordial | `C:/code/ai/game dev/primordial/.claude/skills/` | `godot-task`, `godotsmith` | — |
+| BMAD claude Windows | `C:/code/ai/BMAD claude Windows/.claude/skills/` | `ui-ux-pro-max` | — |
+| localllm_poc / Companion AI | `C:/code/ai/localllm_poc/.claude/skills/` | `ui-ux-pro-max` | — |
 
 The `godotsmith` skill installed in consumers is shipped *by* the godotsmith repo (`C:/code/ai/godotsmith`), which provides client integration with the godotsmith server (separate from the `godogen` orchestrator skill).
 
@@ -61,20 +62,22 @@ These apps either don't host a Claude Code project yet, or they consume skills v
 Per `gamegen/INTEGRATION.md` (mirrored to unitygen + unrealgen), packs are composable:
 
 ```
-Godot project    : gamegen + godogen + godot-task
-Unity project    : gamegen + unitygen + unity-task
-Unreal project   : gamegen + unrealgen + unreal-task
-Engine-agnostic  : gamegen alone (rare)
+Godot project (UI-heavy) : gamegen + godogen + godot-task + godot-ui
+Godot project (basic)    : gamegen + godogen + godot-task
+Unity project            : gamegen + unitygen + unity-task
+Unreal project           : gamegen + unrealgen + unreal-task
+Web/UI-only project      : ui-ux-pro-max  (alone, or with relevant frameworks)
+Studio internal apps     : ui-ux-pro-max + project-specific local overrides
 ```
 
-Each engine pack ships an orchestrator (`<engine>gen`) + executor (`<engine>-task`). `gamegen` provides the cross-engine layer (personas, commands, templates, path-scoped rules).
+Each engine pack ships an orchestrator (`<engine>gen`) + executor (`<engine>-task`). `gamegen` provides the cross-engine layer (personas, commands, templates, path-scoped rules). `godot-ui` and `ui-ux-pro-max` are UI-discipline specialists, orthogonal to the engine packs.
 
 ## Action items
 
-- [ ] **Create GitHub remotes** for `gamegen`, `unitygen`, `unrealgen` under `github.com/NoxDevelopment/` and push initial commits.
-- [ ] **Decide ui-ux-pro-max ownership**: extract to its own repo (sibling of gamegen) with a `publish.sh`, or recognize it as third-party and pin a vendored version + license. Currently shipping two divergent-able copies.
-- [ ] **Decide godot-ui future**: leave project-local in cigs-and-dreams, or promote to a reusable `godot-ui` sibling pack for stylized UI authoring across Godot projects.
-- [ ] **Audit consumers periodically.** Run a discovery pass quarterly (or after a `publish.sh` change to any source pack) to make sure consumers haven't drifted.
+- [ ] **Create GitHub remotes** for `gamegen`, `unitygen`, `unrealgen`, `godot-ui`, `ui-ux-pro-max`, `noxdev-skill-registry` under `github.com/NoxDevelopment/` and push initial commits.
+- [x] **Extract ui-ux-pro-max** to its own repo with `publish.sh`. _(done 2026-04-25 — `C:/code/ai/ui-ux-pro-max`, both consumers republished from the new source.)_
+- [x] **Promote godot-ui** to a reusable sibling pack. _(done 2026-04-25 — `C:/code/ai/godot-ui`, cigs-and-dreams republished + project-local override moved to `godot-ui-overrides/style.md`.)_
+- [ ] **Audit consumers periodically.** Run `scripts/discover.sh` and `scripts/audit.sh` quarterly (or after a `publish.sh` change to any source pack) to make sure consumers haven't drifted.
 
 ## Discovery commands
 
