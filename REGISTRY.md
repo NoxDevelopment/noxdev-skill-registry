@@ -1,6 +1,6 @@
 # Skills Registry — what we author, what we consume, where it lives
 
-Single source of truth for every Claude Code skill pack used across the studio's apps. Maintained alongside `C:/code/ai/CLAUDE.md`. Last reviewed: **2026-05-17** (godogen grew to 20 skills — added `video-pipeline` (LTX 2.3 on 8GB VRAM via Deno's workflow) after the asset-manifest/provider-preflight/character-sheet batch).
+Single source of truth for every Claude Code skill pack used across the studio's apps. Maintained alongside `C:/code/ai/CLAUDE.md`. Last reviewed: **2026-05-17** (godogen grew to 23 skills — added `engine-export`, `skeleton-rig`, `ui-elements` alongside MVP-2 of noxdev-creative-studio).
 
 ## Authoring repos (sources)
 
@@ -9,7 +9,7 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 | Repo | Path | Skills Provided | Git Remote |
 |------|------|----------------|------------|
 | **gamegen** | `C:/code/ai/gamegen` | `gamegen` (engine-agnostic personas / commands / templates / rules) | github.com/NoxDevelopment/gamegen |
-| **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task`, `image-pipeline`, `audio-pipeline`, `video-pipeline`, `3d-asset-pipeline`, `animation-pipeline`, `scene-art`, `character-sheet`, `shader-craft`, `ui-screens`, `narrative`, `playtest`, `input-handling`, `save-system`, `camera-rigs`, `asset-manifest`, `provider-preflight`, `style-anchor`, `world-layout` (20 total — see *godogen skill catalog* below) | github.com/NoxDevelopment/godogen (origin) · htdt/godogen (upstream) |
+| **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task`, `image-pipeline`, `audio-pipeline`, `video-pipeline`, `3d-asset-pipeline`, `animation-pipeline`, `scene-art`, `character-sheet`, `skeleton-rig`, `shader-craft`, `ui-screens`, `ui-elements`, `narrative`, `playtest`, `input-handling`, `save-system`, `camera-rigs`, `asset-manifest`, `provider-preflight`, `engine-export`, `style-anchor`, `world-layout` (23 total — see *godogen skill catalog* below) | github.com/NoxDevelopment/godogen (origin) · htdt/godogen (upstream) |
 | **godot-ui** | `C:/code/ai/godot-ui` | `godot-ui` (Godot UI specialist — Control nodes, StyleBox, Theme, common shapes) | github.com/NoxDevelopment/godot-ui |
 | **unitygen** | `C:/code/ai/unitygen` | `unitygen`, `unity-task` | github.com/NoxDevelopment/unitygen |
 | **unrealgen** | `C:/code/ai/unrealgen` | `unrealgen`, `unreal-task` | github.com/NoxDevelopment/unrealgen |
@@ -19,10 +19,10 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 ### Authoring repos — notes
 
 - All authoring repos are now hosted under `github.com/NoxDevelopment/`. (godogen tracks `htdt/godogen` as `upstream` for pulling community improvements.)
-- **godogen** now ships **20 skills** (was 2). The original orchestrator/executor pair (`godogen`, `godot-task`) is now joined by 16 implementation skills and 2 discipline skills — see the catalog below. The engine sibling repos (`unitygen`, `unrealgen`) still follow the orchestrator+executor split and have not been expanded.
+- **godogen** now ships **23 skills** (was 2). The original orchestrator/executor pair (`godogen`, `godot-task`) is now joined by 19 implementation skills and 2 discipline skills — see the catalog below. The engine sibling repos (`unitygen`, `unrealgen`) still follow the orchestrator+executor split and have not been expanded.
 - **godot-ui** is a sibling pack to `godogen` — it covers Godot UI mechanics. Project-specific style identity stays in the consumer (see `godot-ui/skills/godot-ui/style-overrides.md`).
 
-### godogen skill catalog (20)
+### godogen skill catalog (23)
 
 | Skill | Kind | Job |
 |-------|------|-----|
@@ -37,6 +37,9 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 | `shader-craft` | tooled | Godot 4 `.gdshader` and Unity ShaderLab/HLSL for water/fog/dissolve/outline/pixel-dither. Text-only, no models. |
 | `ui-screens` | tooled | Godot `.tscn` + Unity Canvas-prefab JSON scaffolds for title/menu/hud/inventory/dialog. |
 | `character-sheet` | tooled | One ComfyUI/ZIT call produces a 3×3 pose grid for a single character; post-process magenta-keys the background, slices into cells, tight-crops, pads to aspect, saves 9 individual pose PNGs. 9× cheaper + perfect style consistency vs per-frame generation. |
+| `skeleton-rig` | tooled | Stick-figure pose-image emission (OpenPose-style) — 24-pose built-in library plus custom-joint input. Pair with `image-pipeline --reference` for ControlNet-style pose conditioning. Pixellab parity, locally + free. |
+| `ui-elements` | tooled | Curated `image-pipeline` wrappers for UI sprites: buttons (auto hover/pressed variants), icons, healthbars (matched frame+fill), 9-slice panels (with Godot patch_margin hints), cursors (with hotspots), decorative frames. Pixellab parity. |
+| `engine-export` | tooled | Bridges finished assets into engine-native scaffolds. Subcommands: `sprite-frames` (Godot SpriteFrames .tres from spritesheet, with `--append` for multi-animation resources), `sprite-prefab` (Unity prefab JSON), `tileset-tres`, `audio-scene` (AudioStreamPlayer/3D .tscn), `video-scene` (VideoStreamPlayer scene). Closes the last-mile gap between PNG/WAV/MP4 outputs and engine usage. |
 | `narrative` | tooled | Ink/Yarn/Dialogic dialogue → engine formats, quest schema validation, world-bible scaffolder, NPC voice batch. |
 | `playtest` | tooled | Godot 4 headless runner + checkpoint autoload + markdown bug-surface reports. |
 | `input-handling` | tooled | InputMap action templates (platformer / topdown / fps / rts / puzzle / fighting / racing), rebinding UI scaffold (Control tree + persistence autoload), linter for input foot-guns. |
@@ -61,10 +64,10 @@ These are the runtime homes. Each `.claude/skills/<name>` directory under a cons
 
 | Project | Path | Installed Skills | Project-local overrides |
 |---------|------|------------------|-------------------------|
-| Cigs and Dreams | `C:/code/ai/game dev/cigs-and-dreams/.claude/skills/` | all 20 godogen + `godot-ui` + `godotsmith` | `godot-ui-overrides/style.md` (Shadowrun-SNES palette + project rules) |
-| Deathwood | `C:/code/ai/game dev/deathwood/.claude/skills/` | all 20 godogen + `godotsmith` | — |
-| New Excitebike | `C:/code/ai/game dev/new-excitebike/.claude/skills/` | all 20 godogen + `godotsmith` | — |
-| Primordial | `C:/code/ai/game dev/primordial/.claude/skills/` | all 20 godogen + `godotsmith` | — |
+| Cigs and Dreams | `C:/code/ai/game dev/cigs-and-dreams/.claude/skills/` | all 23 godogen + `godot-ui` + `godotsmith` | `godot-ui-overrides/style.md` (Shadowrun-SNES palette + project rules) |
+| Deathwood | `C:/code/ai/game dev/deathwood/.claude/skills/` | all 23 godogen + `godotsmith` | — |
+| New Excitebike | `C:/code/ai/game dev/new-excitebike/.claude/skills/` | all 23 godogen + `godotsmith` | — |
+| Primordial | `C:/code/ai/game dev/primordial/.claude/skills/` | all 23 godogen + `godotsmith` | — |
 | BMAD claude Windows | `C:/code/ai/BMAD claude Windows/.claude/skills/` | `ui-ux-pro-max` | — |
 | localllm_poc / Companion AI | `C:/code/ai/localllm_poc/.claude/skills/` | `ui-ux-pro-max` | — |
 
@@ -72,7 +75,7 @@ The `godotsmith` skill installed in consumers is shipped *by* the godotsmith rep
 
 ### Consumer republish
 
-All four Godot consumers were republished on **2026-05-17** to godogen commit `2638793` — they now carry the full 20-skill godogen catalog. The publish.sh was updated in the same commit to sync per-skill (preserving sibling-repo skills like `godot-ui` and `godotsmith` instead of wiping them with a top-level `rsync --delete`).
+All four Godot consumers were republished on **2026-05-17** to godogen commit `48c2d98` — they now carry the full 23-skill godogen catalog (most recent batch: `engine-export` + `skeleton-rig` + `ui-elements`). The publish.sh was updated in the same commit to sync per-skill (preserving sibling-repo skills like `godot-ui` and `godotsmith` instead of wiping them with a top-level `rsync --delete`).
 
 To republish a consumer to the current godogen catalog:
 
@@ -88,7 +91,7 @@ These apps **consume** the godogen skill stack but don't install skills into a `
 
 | App | Path | Wraps | Status |
 |-----|------|-------|--------|
-| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | 5 godogen skills (image, character-sheet, animation, video, audio-sfx) via subprocess; project mgmt via asset-manifest | MVP-1 scaffold complete 2026-05-17 (FastAPI backend + SvelteKit frontend + Konva-style raster editor). Repo: github.com/NoxDevelopment/noxdev-creative-studio. End-to-end verified against live ComfyUI. |
+| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | **15 godogen generators** via subprocess (image, character-sheet, animation, video-t2v/i2v, audio-sfx/music/speech, scene-parallax/skybox/tileset/environment, 3d-prop, shader, ui-screen, narrative-lore); project mgmt via asset-manifest | **MVP-2** complete 2026-05-17 (FastAPI backend + 14 SvelteKit panels + raster editor + **Node MCP server** w/ 28 tools for Claude Code/Cursor/Windsurf). Repo: github.com/NoxDevelopment/noxdev-creative-studio. |
 
 ## Studio apps (no skills installed)
 
@@ -124,7 +127,7 @@ Each engine pack ships an orchestrator (`<engine>gen`) + executor (`<engine>-tas
 - [x] **Create GitHub remotes** for `gamegen`, `unitygen`, `unrealgen`, `godot-ui`, `ui-ux-pro-max`, `noxdev-skill-registry`, `godogen` (NoxDev fork) under `github.com/NoxDevelopment/` and push. _(done 2026-04-26.)_
 - [x] **Extract ui-ux-pro-max** to its own repo with `publish.sh`. _(done 2026-04-25 — both consumers republished from the new source.)_
 - [x] **Promote godot-ui** to a reusable sibling pack. _(done 2026-04-25 — cigs-and-dreams republished + project-local override moved to `godot-ui-overrides/style.md`.)_
-- [x] **Expand godogen catalog.** _(done 2026-05-07 → 2026-05-17 — added 18 skills total: image/audio/video/3d/animation/scene/character-sheet/shader/ui-screens/narrative/playtest pipelines + style-anchor and world-layout disciplines + input-handling/save-system/camera-rigs engineering scaffolds + asset-manifest/provider-preflight cross-pipeline glue.)_
+- [x] **Expand godogen catalog.** _(done 2026-05-07 → 2026-05-17 — added 21 skills total: image/audio/video/3d/animation/scene/character-sheet/skeleton-rig/shader/ui-screens/ui-elements/narrative/playtest pipelines + style-anchor and world-layout disciplines + input-handling/save-system/camera-rigs engineering scaffolds + asset-manifest/provider-preflight/engine-export cross-pipeline glue.)_
 - [x] **Republish godogen consumers.** _(done 2026-05-17 — all four Godot consumers now have the full 20-skill godogen catalog. publish.sh was hardened in the same pass to sync per-skill instead of wiping the whole `.claude/skills/` tree, so sibling-repo skills like godot-ui + godotsmith now survive a republish.)_
 - [ ] **Pull unitygen / unrealgen up to parity.** The godogen expansion (image-pipeline, audio-pipeline, etc.) is engine-agnostic in spirit but Godot-specific in emission. Decide whether to (a) port equivalents into unitygen/unrealgen, or (b) move the engine-agnostic generators (image, audio, 3d) up into `gamegen` and have all three engine packs depend on them.
 - [ ] **Audit consumers periodically.** Run `scripts/discover.sh` and `scripts/audit.sh` quarterly (or after a `publish.sh` change to any source pack) to make sure consumers haven't drifted.
