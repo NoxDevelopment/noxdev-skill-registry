@@ -61,18 +61,18 @@ These are the runtime homes. Each `.claude/skills/<name>` directory under a cons
 
 | Project | Path | Installed Skills | Project-local overrides |
 |---------|------|------------------|-------------------------|
-| Cigs and Dreams | `C:/code/ai/game dev/cigs-and-dreams/.claude/skills/` | `godot-task`, `godot-ui`, `godotsmith` | `godot-ui-overrides/style.md` (Shadowrun-SNES palette + project rules) |
-| Deathwood | `C:/code/ai/game dev/deathwood/.claude/skills/` | `godot-task`, `godotsmith` | — |
-| New Excitebike | `C:/code/ai/game dev/new-excitebike/.claude/skills/` | `godot-task`, `godotsmith` | — |
-| Primordial | `C:/code/ai/game dev/primordial/.claude/skills/` | `godot-task`, `godotsmith` | — |
+| Cigs and Dreams | `C:/code/ai/game dev/cigs-and-dreams/.claude/skills/` | all 20 godogen + `godot-ui` + `godotsmith` | `godot-ui-overrides/style.md` (Shadowrun-SNES palette + project rules) |
+| Deathwood | `C:/code/ai/game dev/deathwood/.claude/skills/` | all 20 godogen + `godotsmith` | — |
+| New Excitebike | `C:/code/ai/game dev/new-excitebike/.claude/skills/` | all 20 godogen + `godotsmith` | — |
+| Primordial | `C:/code/ai/game dev/primordial/.claude/skills/` | all 20 godogen + `godotsmith` | — |
 | BMAD claude Windows | `C:/code/ai/BMAD claude Windows/.claude/skills/` | `ui-ux-pro-max` | — |
 | localllm_poc / Companion AI | `C:/code/ai/localllm_poc/.claude/skills/` | `ui-ux-pro-max` | — |
 
 The `godotsmith` skill installed in consumers is shipped *by* the godotsmith repo (`C:/code/ai/godotsmith`), which provides client integration with the godotsmith server (separate from the `godogen` orchestrator skill).
 
-### ⚠ Drift: consumers are behind on godogen
+### Consumer republish
 
-godogen now publishes 13 skills, but every Godot consumer above only has `godot-task` installed from godogen — they predate the image-pipeline / audio-pipeline / 3d-asset-pipeline / animation-pipeline / scene-art / shader-craft / ui-screens / narrative / playtest / style-anchor / world-layout additions. None have been republished since 2026-04-25.
+All four Godot consumers were republished on **2026-05-17** to godogen commit `2638793` — they now carry the full 20-skill godogen catalog. The publish.sh was updated in the same commit to sync per-skill (preserving sibling-repo skills like `godot-ui` and `godotsmith` instead of wiping them with a top-level `rsync --delete`).
 
 To republish a consumer to the current godogen catalog:
 
@@ -80,7 +80,7 @@ To republish a consumer to the current godogen catalog:
 bash C:/code/ai/godogen/publish.sh "C:/code/ai/game dev/<project>"
 ```
 
-The `publish.sh` uses `rsync --delete`, so it will overwrite the consumer's `.claude/skills/` with the current source state. Project-local overrides under sibling dirs (e.g. `godot-ui-overrides/`) are not touched.
+Per-skill sync semantics: each godogen skill subdir is replaced atomically; non-godogen skills (sibling-repo installs, project-local `*-overrides/` and `*.local/` dirs) are left untouched. An "unknown skills" warning prints if anything in the consumer can't be matched to godogen or a known sibling — flag for manual cleanup if it's a removed-from-godogen orphan.
 
 ## Studio apps (no skills installed)
 
@@ -117,7 +117,7 @@ Each engine pack ships an orchestrator (`<engine>gen`) + executor (`<engine>-tas
 - [x] **Extract ui-ux-pro-max** to its own repo with `publish.sh`. _(done 2026-04-25 — both consumers republished from the new source.)_
 - [x] **Promote godot-ui** to a reusable sibling pack. _(done 2026-04-25 — cigs-and-dreams republished + project-local override moved to `godot-ui-overrides/style.md`.)_
 - [x] **Expand godogen catalog.** _(done 2026-05-07 → 2026-05-17 — added 18 skills total: image/audio/video/3d/animation/scene/character-sheet/shader/ui-screens/narrative/playtest pipelines + style-anchor and world-layout disciplines + input-handling/save-system/camera-rigs engineering scaffolds + asset-manifest/provider-preflight cross-pipeline glue.)_
-- [ ] **Republish godogen consumers.** All four Godot consumers (cigs-and-dreams, deathwood, new-excitebike, primordial) need `godogen/publish.sh` re-run to pick up the 18 new skills. Coordinate with each project owner before running — `rsync --delete` will replace any locally-modified copies under `.claude/skills/`.
+- [x] **Republish godogen consumers.** _(done 2026-05-17 — all four Godot consumers now have the full 20-skill godogen catalog. publish.sh was hardened in the same pass to sync per-skill instead of wiping the whole `.claude/skills/` tree, so sibling-repo skills like godot-ui + godotsmith now survive a republish.)_
 - [ ] **Pull unitygen / unrealgen up to parity.** The godogen expansion (image-pipeline, audio-pipeline, etc.) is engine-agnostic in spirit but Godot-specific in emission. Decide whether to (a) port equivalents into unitygen/unrealgen, or (b) move the engine-agnostic generators (image, audio, 3d) up into `gamegen` and have all three engine packs depend on them.
 - [ ] **Audit consumers periodically.** Run `scripts/discover.sh` and `scripts/audit.sh` quarterly (or after a `publish.sh` change to any source pack) to make sure consumers haven't drifted.
 
