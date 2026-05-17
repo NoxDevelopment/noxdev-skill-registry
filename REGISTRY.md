@@ -1,6 +1,6 @@
 # Skills Registry — what we author, what we consume, where it lives
 
-Single source of truth for every Claude Code skill pack used across the studio's apps. Maintained alongside `C:/code/ai/CLAUDE.md`. Last reviewed: **2026-05-17** (godogen grew to 16 skills — added `input-handling`, `save-system`, `camera-rigs` engineering scaffolds on top of the existing 13).
+Single source of truth for every Claude Code skill pack used across the studio's apps. Maintained alongside `C:/code/ai/CLAUDE.md`. Last reviewed: **2026-05-17** (godogen grew to 19 skills — added `asset-manifest`, `provider-preflight`, `character-sheet` on top of the input-handling / save-system / camera-rigs batch).
 
 ## Authoring repos (sources)
 
@@ -9,7 +9,7 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 | Repo | Path | Skills Provided | Git Remote |
 |------|------|----------------|------------|
 | **gamegen** | `C:/code/ai/gamegen` | `gamegen` (engine-agnostic personas / commands / templates / rules) | github.com/NoxDevelopment/gamegen |
-| **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task`, `image-pipeline`, `audio-pipeline`, `3d-asset-pipeline`, `animation-pipeline`, `scene-art`, `shader-craft`, `ui-screens`, `narrative`, `playtest`, `input-handling`, `save-system`, `camera-rigs`, `style-anchor`, `world-layout` (16 total — see *godogen skill catalog* below) | github.com/NoxDevelopment/godogen (origin) · htdt/godogen (upstream) |
+| **godogen** | `C:/code/ai/godogen` | `godogen`, `godot-task`, `image-pipeline`, `audio-pipeline`, `3d-asset-pipeline`, `animation-pipeline`, `scene-art`, `character-sheet`, `shader-craft`, `ui-screens`, `narrative`, `playtest`, `input-handling`, `save-system`, `camera-rigs`, `asset-manifest`, `provider-preflight`, `style-anchor`, `world-layout` (19 total — see *godogen skill catalog* below) | github.com/NoxDevelopment/godogen (origin) · htdt/godogen (upstream) |
 | **godot-ui** | `C:/code/ai/godot-ui` | `godot-ui` (Godot UI specialist — Control nodes, StyleBox, Theme, common shapes) | github.com/NoxDevelopment/godot-ui |
 | **unitygen** | `C:/code/ai/unitygen` | `unitygen`, `unity-task` | github.com/NoxDevelopment/unitygen |
 | **unrealgen** | `C:/code/ai/unrealgen` | `unrealgen`, `unreal-task` | github.com/NoxDevelopment/unrealgen |
@@ -19,10 +19,10 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 ### Authoring repos — notes
 
 - All authoring repos are now hosted under `github.com/NoxDevelopment/`. (godogen tracks `htdt/godogen` as `upstream` for pulling community improvements.)
-- **godogen** now ships **16 skills** (was 2). The original orchestrator/executor pair (`godogen`, `godot-task`) is now joined by 12 implementation skills and 2 discipline skills — see the catalog below. The engine sibling repos (`unitygen`, `unrealgen`) still follow the orchestrator+executor split and have not been expanded.
+- **godogen** now ships **19 skills** (was 2). The original orchestrator/executor pair (`godogen`, `godot-task`) is now joined by 15 implementation skills and 2 discipline skills — see the catalog below. The engine sibling repos (`unitygen`, `unrealgen`) still follow the orchestrator+executor split and have not been expanded.
 - **godot-ui** is a sibling pack to `godogen` — it covers Godot UI mechanics. Project-specific style identity stays in the consumer (see `godot-ui/skills/godot-ui/style-overrides.md`).
 
-### godogen skill catalog (16)
+### godogen skill catalog (19)
 
 | Skill | Kind | Job |
 |-------|------|-----|
@@ -35,11 +35,14 @@ Each row is a git repo whose primary purpose is producing one or more Claude Cod
 | `scene-art` | tooled | Parallax / skybox / tileset / wide environment generators with optional Godot-Unity sidecars. |
 | `shader-craft` | tooled | Godot 4 `.gdshader` and Unity ShaderLab/HLSL for water/fog/dissolve/outline/pixel-dither. Text-only, no models. |
 | `ui-screens` | tooled | Godot `.tscn` + Unity Canvas-prefab JSON scaffolds for title/menu/hud/inventory/dialog. |
+| `character-sheet` | tooled | One ComfyUI/ZIT call produces a 3×3 pose grid for a single character; post-process magenta-keys the background, slices into cells, tight-crops, pads to aspect, saves 9 individual pose PNGs. 9× cheaper + perfect style consistency vs per-frame generation. |
 | `narrative` | tooled | Ink/Yarn/Dialogic dialogue → engine formats, quest schema validation, world-bible scaffolder, NPC voice batch. |
 | `playtest` | tooled | Godot 4 headless runner + checkpoint autoload + markdown bug-surface reports. |
 | `input-handling` | tooled | InputMap action templates (platformer / topdown / fps / rts / puzzle / fighting / racing), rebinding UI scaffold (Control tree + persistence autoload), linter for input foot-guns. |
 | `save-system` | tooled | Typed `Resource` save model + slot manager (atomic .tmp+rename writes) + autosave timer + thumbnail capture. 6 presets (platformer / topdown / rpg / puzzle / racing / minimal) and a migration-chain pattern baked in. |
 | `camera-rigs` | tooled | Drop-in `.tscn` + `.gd` rigs: platformer / topdown / sidescroller (2D); third-person / first-person / topdown-3d (3D); cinematic (2D or 3D dolly); plus screen-shake mixin and bounds-clamp helpers. |
+| `asset-manifest` | tooled | Durable `assets/manifest.json` index of every generated asset — `asset_id` + sha + provider + labels + params + references. Find/list/verify/prune/export (Godot `.gd` or Unity JSON). The "have we already made this?" gate. |
+| `provider-preflight` | tooled | Pre-batch health check: ComfyUI reachable (`/system_stats`), required LoRAs present, output dir writable + free space, paid-provider budget headroom, MCP server `--health`. JSON output + non-zero exit on errors. |
 | `style-anchor` | discipline | `reference.png` is ground truth. ASSETS.md contract, palette extraction, batch-then-verify, drift decision tree. |
 | `world-layout` | discipline | ASCII-first authored maps → `LAYOUT.md` → string-grid Godot transcribe. Defeats "streets everywhere" failure. |
 
@@ -112,8 +115,8 @@ Each engine pack ships an orchestrator (`<engine>gen`) + executor (`<engine>-tas
 - [x] **Create GitHub remotes** for `gamegen`, `unitygen`, `unrealgen`, `godot-ui`, `ui-ux-pro-max`, `noxdev-skill-registry`, `godogen` (NoxDev fork) under `github.com/NoxDevelopment/` and push. _(done 2026-04-26.)_
 - [x] **Extract ui-ux-pro-max** to its own repo with `publish.sh`. _(done 2026-04-25 — both consumers republished from the new source.)_
 - [x] **Promote godot-ui** to a reusable sibling pack. _(done 2026-04-25 — cigs-and-dreams republished + project-local override moved to `godot-ui-overrides/style.md`.)_
-- [x] **Expand godogen catalog.** _(done 2026-05-07 → 2026-05-17 — added 14 skills total: image/audio/3d/animation/scene/shader/ui-screens/narrative/playtest pipelines + style-anchor and world-layout disciplines + input-handling/save-system/camera-rigs engineering scaffolds.)_
-- [ ] **Republish godogen consumers.** All four Godot consumers (cigs-and-dreams, deathwood, new-excitebike, primordial) need `godogen/publish.sh` re-run to pick up the 14 new skills. Coordinate with each project owner before running — `rsync --delete` will replace any locally-modified copies under `.claude/skills/`.
+- [x] **Expand godogen catalog.** _(done 2026-05-07 → 2026-05-17 — added 17 skills total: image/audio/3d/animation/scene/character-sheet/shader/ui-screens/narrative/playtest pipelines + style-anchor and world-layout disciplines + input-handling/save-system/camera-rigs engineering scaffolds + asset-manifest/provider-preflight cross-pipeline glue.)_
+- [ ] **Republish godogen consumers.** All four Godot consumers (cigs-and-dreams, deathwood, new-excitebike, primordial) need `godogen/publish.sh` re-run to pick up the 17 new skills. Coordinate with each project owner before running — `rsync --delete` will replace any locally-modified copies under `.claude/skills/`.
 - [ ] **Pull unitygen / unrealgen up to parity.** The godogen expansion (image-pipeline, audio-pipeline, etc.) is engine-agnostic in spirit but Godot-specific in emission. Decide whether to (a) port equivalents into unitygen/unrealgen, or (b) move the engine-agnostic generators (image, audio, 3d) up into `gamegen` and have all three engine packs depend on them.
 - [ ] **Audit consumers periodically.** Run `scripts/discover.sh` and `scripts/audit.sh` quarterly (or after a `publish.sh` change to any source pack) to make sure consumers haven't drifted.
 
