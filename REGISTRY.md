@@ -82,13 +82,21 @@ bash C:/code/ai/godogen/publish.sh "C:/code/ai/game dev/<project>"
 
 Per-skill sync semantics: each godogen skill subdir is replaced atomically; non-godogen skills (sibling-repo installs, project-local `*-overrides/` and `*.local/` dirs) are left untouched. An "unknown skills" warning prints if anything in the consumer can't be matched to godogen or a known sibling — flag for manual cleanup if it's a removed-from-godogen orphan.
 
+## Studio apps (compose skills via API/subprocess rather than installing them)
+
+These apps **consume** the godogen skill stack but don't install skills into a `.claude/skills/` dir — they wrap the CLIs at runtime.
+
+| App | Path | Wraps | Status |
+|-----|------|-------|--------|
+| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | 5 godogen skills (image, character-sheet, animation, video, audio-sfx) via subprocess; project mgmt via asset-manifest | MVP-1 scaffold complete 2026-05-17 (FastAPI backend + SvelteKit frontend + Konva-style raster editor). Repo: github.com/NoxDevelopment/noxdev-creative-studio. End-to-end verified against live ComfyUI. |
+
 ## Studio apps (no skills installed)
 
 These apps either don't host a Claude Code project yet, or they consume skills via different mechanisms.
 
 | App | Path | Notes |
 |-----|------|-------|
-| Noxdev Studio | `C:/code/ai/Noxdev-Studio` | The studio OS; `.claude/` exists for repo-level config but no published skills. Future home for studio-internal automation skills. |
+| Noxdev Studio | `C:/code/ai/Noxdev-Studio` | The studio OS shell; `.claude/` exists for repo-level config but no published skills. Embeds `noxdev-creative-studio` via iframe + MCP (planned). |
 | godotsmith server | `C:/code/ai/godotsmith` | Headless Godot server. Authoring repo for the `godotsmith` consumer skill. |
 | ArtStation | `C:/code/ai/ArtStation` | Reference / prototype workspace. |
 | betterhomeschool | `C:/code/ai/betterhomeschool` | Side project. |
