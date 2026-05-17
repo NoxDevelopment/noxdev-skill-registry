@@ -91,7 +91,7 @@ These apps **consume** the godogen skill stack but don't install skills into a `
 
 | App | Path | Wraps | Status |
 |-----|------|-------|--------|
-| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | **15 godogen generators** via subprocess (image, character-sheet, animation, video-t2v/i2v, audio-sfx/music/speech, scene-parallax/skybox/tileset/environment, 3d-prop, shader, ui-screen, narrative-lore); project mgmt via asset-manifest | **MVP-2** complete 2026-05-17 (FastAPI backend + 14 SvelteKit panels + raster editor + **Node MCP server** w/ 28 tools for Claude Code/Cursor/Windsurf). Repo: github.com/NoxDevelopment/noxdev-creative-studio. |
+| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | **All 18 godogen content skills** via subprocess (image / character-sheet / skeleton-rig / animation / video-t2v+i2v / audio-sfx+music+speech / scene-parallax+skybox+tileset+environment / 3d-prop / shader / ui-screen / narrative-lore / ui-button+icon+healthbar+panel+cursor+frame); plus **5 engine-export targets** (Godot SpriteFrames/.tres + Unity prefab JSON + Godot TileSet/.tres + audio scene + video scene); project mgmt via asset-manifest | **MVP-3** complete 2026-05-17 (FastAPI backend with 53 routes + 22 SvelteKit panels incl. raster editor + consolidated skeleton + consolidated export + **Node MCP server** w/ 42 tools for Claude Code / Cursor / Windsurf / VS Code / Gemini CLI / Zed / Cline / Continue). Repo: github.com/NoxDevelopment/noxdev-creative-studio. |
 
 ## Studio apps (no skills installed)
 
