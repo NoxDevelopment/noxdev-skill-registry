@@ -91,7 +91,7 @@ These apps **consume** the godogen skill stack but don't install skills into a `
 
 | App | Path | Wraps | Status |
 |-----|------|-------|--------|
-| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | **All 18 godogen content skills** via subprocess (image / character-sheet / skeleton-rig / animation / video-t2v+i2v / audio-sfx+music+speech / scene-parallax+skybox+tileset+environment / 3d-prop / shader / ui-screen / narrative-lore / ui-button+icon+healthbar+panel+cursor+frame); plus **5 engine-export targets** (Godot SpriteFrames/.tres + Unity prefab JSON + Godot TileSet/.tres + audio scene + video scene); project mgmt via asset-manifest | **MVP-3** complete 2026-05-17 (FastAPI backend with 53 routes + 22 SvelteKit panels incl. raster editor + consolidated skeleton + consolidated export + **Node MCP server** w/ 42 tools for Claude Code / Cursor / Windsurf / VS Code / Gemini CLI / Zed / Cline / Continue). Repo: github.com/NoxDevelopment/noxdev-creative-studio. |
+| **Noxdev Creative Studio** | `C:/code/ai/noxdev-creative-studio` | **All 18 godogen content skills** via subprocess (image / character-sheet / skeleton-rig / animation / video-t2v+i2v / audio-sfx+music+speech / scene-parallax+skybox+tileset+environment / 3d-prop / shader / ui-screen / narrative-lore / ui-button+icon+healthbar+panel+cursor+frame); plus **5 engine-export targets** (Godot SpriteFrames/.tres + Unity prefab JSON + Godot TileSet/.tres + audio scene + video scene); project mgmt via asset-manifest. **Asset provenance graph** (chain endpoint + UI + MCP tool). **Noxdev-Studio Prisma write-through bridge** (optional, env-gated). | **MVP-3 + chain + module port phase A+B** complete 2026-05-17 (FastAPI backend with 55 routes + 23 SvelteKit panels incl. raster editor + chain view + **Node MCP server** w/ 43 tools). Embedded in Noxdev-Studio at `p/[slug]/creative/` (iframe). Generated assets auto-mirror into the lab's Asset+AssetProvenance tables when `NOXDEV_STUDIO_DB_PATH` is set + project links to a lab slug. Repo: github.com/NoxDevelopment/noxdev-creative-studio. |
 
 ## Studio apps (no skills installed)
 
@@ -99,7 +99,7 @@ These apps either don't host a Claude Code project yet, or they consume skills v
 
 | App | Path | Notes |
 |-----|------|-------|
-| Noxdev Studio | `C:/code/ai/Noxdev-Studio` | The studio OS shell; `.claude/` exists for repo-level config but no published skills. Embeds `noxdev-creative-studio` via iframe + MCP (planned). |
+| Noxdev Studio | `C:/code/ai/Noxdev-Studio` | The studio OS shell (Next.js 15 + Prisma/SQLite + Phase B per its STATUS.md, ~53 modules). **Now embeds `noxdev-creative-studio`** at `p/[slug]/creative/` (iframe + recent-assets strip from its own Asset table). Creative-studio writes through to Noxdev-Studio's `Asset` + `AssetProvenance` Prisma models when the bridge env is set, so generated assets appear in the project's Asset Library natively. |
 | godotsmith server | `C:/code/ai/godotsmith` | Headless Godot server. Authoring repo for the `godotsmith` consumer skill. |
 | ArtStation | `C:/code/ai/ArtStation` | Reference / prototype workspace. |
 | betterhomeschool | `C:/code/ai/betterhomeschool` | Side project. |
