@@ -99,7 +99,7 @@ These apps either don't host a Claude Code project yet, or they consume skills v
 
 | App | Path | Notes |
 |-----|------|-------|
-| Noxdev Studio | `C:/code/ai/Noxdev-Studio` | The studio OS shell (Next.js 15 + Prisma/SQLite + Phase B per its STATUS.md, ~53 modules). **Now embeds `noxdev-creative-studio`** at `p/[slug]/creative/` (iframe + recent-assets strip from its own Asset table). Creative-studio writes through to Noxdev-Studio's `Asset` + `AssetProvenance` Prisma models when the bridge env is set, so generated assets appear in the project's Asset Library natively. |
+| Noxdev Studio | `C:/code/ai/Noxdev-Studio` | The studio OS shell (Next.js 15 + Prisma/SQLite + Phase B per its STATUS.md, ~53 modules). **Embeds `noxdev-creative-studio` natively** at `p/[slug]/creative/`: dashboard with 23 generator tiles + status cards + recent-assets grid (native React reading from Prisma); deeplink routes `p/[slug]/creative/generate/[kind]/` and `p/[slug]/creative/chain/` (focused per-panel iframes with lab-native breadcrumbs). Auto-provisions a creative-studio project per lab slug. Creative-studio assets mirror into Noxdev-Studio's `Asset` + `AssetProvenance` Prisma tables via the studio's bridge. |
 | godotsmith server | `C:/code/ai/godotsmith` | Headless Godot server. Authoring repo for the `godotsmith` consumer skill. |
 | ArtStation | `C:/code/ai/ArtStation` | Reference / prototype workspace. |
 | betterhomeschool | `C:/code/ai/betterhomeschool` | Side project. |
